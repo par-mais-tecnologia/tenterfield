@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tenterfield Tests</title>
+    <script src="../src/index.js">
+    </script>
+    <script>
+      const setupTracker = () => {
+        window.tenterfield({
+          api: {
+            callback: console.log
+          }
+        })
+      }
+      const scriptErrorCall = function () {
+        scriptError(1)
+      }
+
+      const networkErrCall = function () {
+        return fetch('http://asdf.com.tt')
+      }
+
+      const unhandledRejectionCall = function () {
+        return Promise.resolve(1)
+          .then((a) => {unhandledRejection(a)})
+      }
+
+      const unhandledErrorCall = function () {
+        return Promise.resolve(1)
+          .then(() => { throw new Error('unhandled') })
+      }
+    </script>
+</head>
+<body>
+<button id="inlineError" onclick="inlineErrorCall(1)">Inline ERROR!</button>
+<button id="scriptError" onclick="scriptErrorCall()">Script ERROR!</button>
+<button id="networkError" onclick="networkErrCall()">Network ERROR!</button>
+<button id="unhandledRejection" onclick="unhandledRejectionCall()">Unhandled Rejection ERROR!</button>
+<button id="unhandledError" onclick="unhandledErrorCall()">Unhandled ERROR!</button>
+<button id="setupTracker" onclick="setupTracker()">Setup tracker (see console!)</button>
+</body>
+</html>
