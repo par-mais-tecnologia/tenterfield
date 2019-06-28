@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "NODE_ENV=production parcel build src/index.js --out-file=tracker.js",
+    "build": "NODE_ENV=production parcel build src/index.js --out-file=tenterfield.js",
     "start": "parcel test/index.html",
     "test": "mocha test/browser.spec.js --exit"
   },
