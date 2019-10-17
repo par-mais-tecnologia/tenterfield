@@ -14,15 +14,18 @@ const getPath = (path) => {
     .join(' > ')
 }
 
-const clickEvent = ({path, target}) => {
-  const trackable = path[0].childElementCount < 3
-  if (trackable) {
-    api.logEvent({
-      evt: 'CLICK',
-      uri: location.href,
-      path: getPath(path),
-      innerHTML: target.innerHTML,
-    })
+const clickEvent = (event) => {
+  const path = event.path || event.composedPath && event.composedPath()
+  if (path) {
+    const trackable = path[0].childElementCount < 3
+    if (trackable) {
+      api.logEvent({
+        evt: 'CLICK',
+        uri: location.href,
+        path: getPath(path),
+        innerHTML: event.target.innerHTML,
+      })
+    }
   }
 }
 
