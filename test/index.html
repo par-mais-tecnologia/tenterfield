@@ -6,12 +6,15 @@
     <script src="../src/index.js">
     </script>
     <script>
+      let configured = false
+
       const setupTracker = () => {
-        window.tenterfield({
+        window.tenterfield.setup({
           api: {
             callback: console.log
           }
         })
+        configured = true
       }
       const scriptErrorCall = function () {
         scriptError(1)
@@ -30,6 +33,13 @@
         return Promise.resolve(1)
           .then(() => { throw new Error('unhandled') })
       }
+
+      const customEvent = function () {
+        if (!configured) {
+          setupTracker()
+        }
+        window.tenterfield.event({ type: 'custom-event' })
+      }
     </script>
 </head>
 <body>
@@ -38,6 +48,7 @@
 <button id="networkError" onclick="networkErrCall()">Network ERROR!</button>
 <button id="unhandledRejection" onclick="unhandledRejectionCall()">Unhandled Rejection ERROR!</button>
 <button id="unhandledError" onclick="unhandledErrorCall()">Unhandled ERROR!</button>
+<button id="customEvent" onclick="customEvent()">Custom Event (see console!)</button>
 <button id="setupTracker" onclick="setupTracker()">Setup tracker (see console!)</button>
 </body>
 </html>

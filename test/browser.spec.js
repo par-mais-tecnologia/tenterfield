@@ -25,11 +25,12 @@ before(function () {
       .evaluate(() => {
         // Nightmare "evaluate" runs on browser context
         window.events = []
-        window.tenterfield({
+        window.tenterfield.setup({
           api: {
             callback: (payload) => events.push(payload)
           }
         })
+        configured = true
       }))
 })
 
@@ -135,5 +136,17 @@ describe('User Tracking test suite', () => {
         .then((hasErrorEvent) => hasErrorEvent.should.be.true)
     })
 
+  })
+
+  describe('Custom event', () => {
+    it('should log a custom event', () => nightmare
+      .click('#customEvent')
+      .wait(100)
+      .then(() => nightmare.evaluate(() => events.find(({payload}) => {
+          const {evt, type} = payload
+          return evt === 'CUSTOM' && type === 'custom-event'
+        }) !== undefined))
+      .then((hasCustomEvent) => hasCustomEvent.should.be.true)
+    )
   })
 })

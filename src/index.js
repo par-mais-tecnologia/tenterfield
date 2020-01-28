@@ -11,22 +11,25 @@ const availableTrackers = {
   error
 }
 
-const setup = (conf = {}) => {
-  api.setup(conf.api)
-
-  conf = {
-    ...Object.keys(availableTrackers)
-      .reduce((agg, curr) => ({
-        [curr]: typeof conf[curr] === 'boolean' ||
-        (typeof conf[curr] === 'object' && Object.keys(conf[curr]).length > 0) ?
-          conf[curr] : true, ...agg
-      }), {})
+function Tenterfield() {
+  this.event = api.logEvent
+  this.setup = function(conf = {}) {
+    api.setup(conf.api)
+  
+    conf = {
+      ...Object.keys(availableTrackers)
+        .reduce((agg, curr) => ({
+          [curr]: typeof conf[curr] === 'boolean' ||
+          (typeof conf[curr] === 'object' && Object.keys(conf[curr]).length > 0) ?
+            conf[curr] : true, ...agg
+        }), {})
+    }
+    return Object.keys(conf)
+      .map(toggle => conf[toggle] ? availableTrackers[toggle].init({...conf[toggle]}) : false)
+      .filter(tracker => !!tracker)
   }
-  return Object.keys(conf)
-    .map(toggle => conf[toggle] ? availableTrackers[toggle].init({...conf[toggle]}) : false)
-    .filter(tracker => !!tracker)
 }
 
-window.tenterfield = window.tenterfield || setup
+window.tenterfield = window.tenterfield || new Tenterfield()
 
-module.exports = setup
+module.exports = new Tenterfield()

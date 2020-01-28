@@ -8,8 +8,17 @@ const setup = (conf) => {
 
 module.exports = {
   setup,
-  logEvent: (payload) => {
+  logEvent: (payload = {}) => {
     const {endpoint, additionalPayload, callback} = defaultConf
+
+    if (typeof payload !== 'object') {
+      payload = {payload}
+    }
+
+    if (typeof payload.evt === 'undefined') {
+      payload.evt = 'CUSTOM'
+    }
+
     if (callback) {
       callback({payload})
     }
